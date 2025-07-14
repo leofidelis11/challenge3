@@ -115,7 +115,7 @@ app.post('/forgot-password', (req, res) => {
   user.password = 'newpassword';
   user.blocked = false;
   resetFailedAttempts(user);
-  return res.status(200).json({ message: 'Password reset. Your new password is "newpassword".' });
+  return res.status(200).json({ message: 'Password recovery instructions sent to user email.' });
 });
 
 const PORT = process.env.PORT || 3000;
