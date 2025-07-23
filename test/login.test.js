@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { expect } = require('chai');
+const {recoverPassword} = require('./helpers/recover-password')
 require('dotenv').config();
 
 describe('POST /login', ()=> {
@@ -86,5 +87,20 @@ describe('POST /login', ()=> {
 
         expect(response.status).to.equal(401);
         expect(response.body.message).to.equal('Invalid username or password');
-    }); 
+    });
+
+    it('Should allows login after password recovered and return status 200', async ()=> {
+        let newPassword = await recoverPassword('heidi@example.com')
+        
+        const response = await request(process.env.BASE_URL)
+        .post('/login')
+        .set('Content-Type', 'application/json')
+        .send(JSON.stringify({
+            username: 'heidi',
+            password: newPassword
+        }));
+
+        expect(response.status).to.equal(200);
+        expect(response.body.message).to.equal('Login successful');
+    })
 });
