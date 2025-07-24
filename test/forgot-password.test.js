@@ -1,30 +1,17 @@
-const request = require('supertest');
-const { expect } = require('chai');
-require('dotenv').config();
+const {validateMessage} = require('./helpers/common')
+const {forgotPassword} = require('./helpers/forgot-password')
 
 describe('POST /forgot-password', ()=> {
 
     it('Should return status 200 and password changed message if valid email is provided', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/forgot-password')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            email: 'grace@example.com'
-        }));
+        const response = await forgotPassword('grace@example.com');
         
-        expect(response.status).to.equal(200);
-        expect(response.body.message).to.equal('Password reset. Your new password is \"newpassword\".');
+        validateMessage(response, 200, 'Password reset. Your new password is \"newpassword\".');
     });
 
     it('Should return status 404 and email not found message if invalid email is provided', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/forgot-password')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            email: 'invalidemail@example.com'
-        }));
+        const response = await forgotPassword('invalidemail@example.com');
         
-        expect(response.status).to.equal(404);
-        expect(response.body.message).to.equal('Email not found');
+        validateMessage(response, 404, 'Email not found');
     });
 });
