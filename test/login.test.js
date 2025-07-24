@@ -4,7 +4,7 @@ const {validateMessage} = require('./helpers/common')
 
 describe('POST /login', ()=> {
 
-    it('Should allows login with valid credentials and return status 200', async ()=> {
+    it('Should allow login with valid credentials and return status 200', async ()=> {
         const response = await loginWith('alice', 'password123');
 
         validateMessage(response, 200, 'Login successful');
@@ -42,7 +42,7 @@ describe('POST /login', ()=> {
         validateMessage(response, 401, 'Invalid username or password');
     });
 
-    it('Should allows login after password recovered and return status 200', async ()=> {
+    it('Should allow login after password recovered and return status 200', async ()=> {
         let newPassword = await recoverPassword('heidi@example.com');
 
         const response = await loginWith('heidi', newPassword);
