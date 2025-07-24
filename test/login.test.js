@@ -5,7 +5,7 @@ require('dotenv').config();
 
 describe('POST /login', ()=> {
 
-    it('Should allows login with valid credentials and return status 200', async ()=> {
+    it('Should allow login with valid credentials and return status 200', async ()=> {
         const response = await request(process.env.BASE_URL)
         .post('/login')
         .set('Content-Type', 'application/json')
@@ -89,7 +89,7 @@ describe('POST /login', ()=> {
         expect(response.body.message).to.equal('Invalid username or password');
     });
 
-    it('Should allows login after password recovered and return status 200', async ()=> {
+    it('Should allow login after password recovered and return status 200', async ()=> {
         let newPassword = await recoverPassword('heidi@example.com')
         
         const response = await request(process.env.BASE_URL)
