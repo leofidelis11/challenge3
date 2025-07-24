@@ -34,6 +34,17 @@ This project is a simple REST API for a login page, built with Express (JavaScri
 
 The server will run on [http://localhost:3000](http://localhost:3000) by default.
 
+### Environment Variables
+
+Before running tests, create a `.env` file in the project root with the following content:
+
+```
+BASE_URL=http://localhost:3000
+```
+
+- `BASE_URL` should match the URL where your server is running. For local development, use `http://localhost:3000`.
+- If you want to run tests against a different server or port, update the value accordingly.
+
 ## API Endpoints
 
 ### POST `/login`
