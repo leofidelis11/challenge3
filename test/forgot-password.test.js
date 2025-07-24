@@ -4,7 +4,7 @@ require('dotenv').config();
 
 describe('POST /forgot-password', ()=> {
 
-    it('Should return status 200 and password changed message if valid email is provided', async ()=> {
+    it('Should return status 200 and "password reset" message if valid email is provided', async ()=> {
         const response = await request(process.env.BASE_URL)
         .post('/forgot-password')
         .set('Content-Type', 'application/json')
@@ -16,7 +16,7 @@ describe('POST /forgot-password', ()=> {
         expect(response.body.message).to.equal('Password reset. Your new password is \"newpassword\".');
     });
 
-    it('Should return status 404 and email not found message if invalid email is provided', async ()=> {
+    it('Should return status 404 and "email not found" message if invalid email is provided', async ()=> {
         const response = await request(process.env.BASE_URL)
         .post('/forgot-password')
         .set('Content-Type', 'application/json')
