@@ -39,6 +39,17 @@ This project is a simple REST API for a login page, built with Express (JavaScri
 
 The server will run on [http://localhost:3000](http://localhost:3000) by default.
 
+### Environment Variables
+
+Before running tests, create a `.env` file in the project root with the following content:
+
+```
+BASE_URL=http://localhost:3000
+```
+
+- `BASE_URL` should match the URL where your server is running. For local development, use `http://localhost:3000`.
+- If you want to run tests against a different server or port, update the value accordingly.
+
 ## API Endpoints
 
 ### POST `/login`
@@ -142,10 +153,6 @@ challenge3/
 
 The API loads four users from `data/seed.js` at startup. You can modify this file to change the initial users.
 
-## Notes
-- All data is reset when the server restarts.
-- This project is for educational/testing purposes only.
-
 ## Automated Testing
 
 This project includes automated tests for all main API endpoints using Mocha, Chai, and Supertest. Test reports are generated with Mochawesome and saved in the `mochawesome-report` folder.
@@ -177,3 +184,7 @@ Test results will be available in the terminal and a detailed HTML/JSON report w
 ### Test Reports
 
 After running tests, open the HTML report in `mochawesome-report/mochawesome.html` for a detailed summary of test results. 
+
+## Notes
+- All data is reset when the server restarts.
+- This project is for educational/testing purposes only.
