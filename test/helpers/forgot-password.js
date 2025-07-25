@@ -1,6 +1,16 @@
 const request = require('supertest');
 require('dotenv/config');
 
+const forgotPassword = async (email) => {
+    const response = await request(process.env.BASE_URL)
+            .post('/forgot-password')
+            .set('Content-Type', 'application/json')
+            .send(JSON.stringify({
+                email: email
+    }));
+    return response;
+}
+
 const recoverPassword = async (email) => {
         const response = await request(process.env.BASE_URL)
         .post('/forgot-password')
@@ -13,5 +23,6 @@ const recoverPassword = async (email) => {
 }
 
 module.exports = {
+    forgotPassword,
     recoverPassword
 }

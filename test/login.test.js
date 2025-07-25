@@ -1,106 +1,52 @@
-const request = require('supertest');
-const { expect } = require('chai');
-const {recoverPassword} = require('./helpers/recover-password')
-require('dotenv').config();
+const {loginWith} = require('./helpers/login')
+const {recoverPassword} = require('./helpers/forgot-password')
+const {validateMessage} = require('./helpers/common')
 
 describe('POST /login', ()=> {
 
     it('Should allow login with valid credentials and return status 200', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/login')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            username: 'alice',
-            password: 'password123'
-        }));
-        
-        expect(response.status).to.equal(200);
-        expect(response.body.message).to.equal('Login successful');
+        const response = await loginWith('alice', 'password123');
+
+        validateMessage(response, 200, 'Login successful');
     });
 
     it('Should return 401 if invalid username is provided', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/login')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            username: 'username',
-            password: 'qwerty456'
-        }));
+        const response = await loginWith('username', 'qwerty456');
 
-        expect(response.status).to.equal(401);
-        expect(response.body.message).to.equal('Invalid username or password');
+        validateMessage(response, 401, 'Invalid username or password');
     });
 
     it('Should return 401 if invalid password is provided', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/login')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            username: 'carol',
-            password: 'wrongpassword'
-        }));
+        const response = await loginWith('cakrol', 'wrongpassword');
 
-        expect(response.status).to.equal(401);
-        expect(response.body.message).to.equal('Invalid username or password');
+        validateMessage(response, 401, 'Invalid username or password');
     });
 
     it('Should return 423 if login with invalid password is attempted three times', async ()=> {
-            const loginAttempt = async ()=> {
-            return await request(process.env.BASE_URL)
-            .post('/login')
-            .set('Content-Type', 'application/json')
-            .send(JSON.stringify({
-                username: 'dave',
-                password: 'wrongpassword'  
-            }));
-        }
-        
-        await loginAttempt();
-        await loginAttempt();
-        const response = await loginAttempt();
+        await loginWith('dave', 'wrongpassword');
+        await loginWith('dave', 'wrongpassword');
+        const response = await loginWith('dave', 'wrongpassword');
 
-        expect(response.status).to.equal(423);
-        expect(response.body.message).to.equal('Account is blocked due to too many failed attempts');
+        validateMessage(response, 423, 'Account is blocked due to too many failed attempts');
     });
 
     it('Should return 401 if empty username is provided', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/login')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            username: '',
-            password: 'evepass123'
-        }));
+        const response = await loginWith('', 'evepass123');
 
-        expect(response.status).to.equal(401);
-        expect(response.body.message).to.equal('Invalid username or password');
+        validateMessage(response, 401, 'Invalid username or password');
     });
 
     it('Should return 401 if empty password is provided', async ()=> {
-        const response = await request(process.env.BASE_URL)
-        .post('/login')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            username: 'frank',
-            password: ''
-        }));
+        const response = await loginWith('frank', '');
 
-        expect(response.status).to.equal(401);
-        expect(response.body.message).to.equal('Invalid username or password');
+        validateMessage(response, 401, 'Invalid username or password');
     });
 
     it('Should allow login after password recovered and return status 200', async ()=> {
-        let newPassword = await recoverPassword('heidi@example.com')
-        
-        const response = await request(process.env.BASE_URL)
-        .post('/login')
-        .set('Content-Type', 'application/json')
-        .send(JSON.stringify({
-            username: 'heidi',
-            password: newPassword
-        }));
+        let newPassword = await recoverPassword('heidi@example.com');
 
-        expect(response.status).to.equal(200);
-        expect(response.body.message).to.equal('Login successful');
+        const response = await loginWith('heidi', newPassword);
+
+        validateMessage(response, 200, 'Login successful');
     })
 });
