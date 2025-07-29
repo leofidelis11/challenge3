@@ -188,3 +188,11 @@ After running tests, open the HTML report in `mochawesome-report/mochawesome.htm
 ## Notes
 - All data is reset when the server restarts.
 - This project is for educational/testing purposes only.
+
+## Contributors
+
+- [David Costa Souto](https://github.com/davidcsouto)
+- [Isabelle Faria](https://github.com/CodeIsa)
+- [Karina Nascimento](https://github.com/karinaNascimento100)
+- [Leonardo Fidelis](https://github.com/leofidelis11)
+- [Lucas Dias](https://github.com/DiasLuc)
